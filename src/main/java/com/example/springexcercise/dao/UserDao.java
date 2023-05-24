@@ -3,18 +3,22 @@ package com.example.springexcercise.dao;
 import com.example.springexcercise.domain.User;
 
 import java.sql.*;
-import java.util.Map;
 
 import static java.lang.System.getenv;
 
 public class UserDao {
 
     //public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
-    SimpleConnectionMaker connectionMaker = new SimpleConnectionMaker();
+    private ConnectionMaker connectionMaker;
+
+    public UserDao(){
+        connectionMaker = new DConnectionMaker();
+    }
+
 
 
     public void add(User user) throws ClassNotFoundException, SQLException {
-        Connection conn = connectionMaker.makeNewConnection();
+        Connection conn = connectionMaker.makeConnection();
 //        Connection conn = getConnection();
 
         PreparedStatement pstmt = conn.prepareStatement("insert into users(id, name, password) values(?, ?, ?)");
@@ -31,7 +35,7 @@ public class UserDao {
     public User get(String id) throws ClassNotFoundException, SQLException {
 
 
-        Connection conn = connectionMaker.makeNewConnection();
+        Connection conn = connectionMaker.makeConnection();
         //Connection conn = getConnection();
 
         PreparedStatement pstmt = conn.prepareStatement("select id, name, password from users where id = ?");
